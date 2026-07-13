@@ -68,3 +68,24 @@ Establish the project foundation before implementation.
 
 A clear software architecture established before implementation significantly improves the quality of AI-assisted development.
 
+# Journal 002
+
+Topic
+
+Simulation Architecture
+
+Human Decisions
+
+- Approved Level 1 scope.
+- Approved module structure.
+- Approved event processing order.
+
+AI Contributions
+
+- Proposed simulator architecture.
+- Reviewed module responsibilities.
+- Identified unresolved timing issues.
+
+Lessons Learned
+
+Architecture should be finalized before parameter implementation.
