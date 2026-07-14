@@ -6,6 +6,35 @@ Unlike `architecture.md`, which defines the approved software architecture, this
 
 ---
 
+# Parameter Definition
+
+Status
+
+Proposed
+
+The Level 1 simulator separates immutable configuration data from mutable simulation state.
+
+Parameters are grouped by functional blocks.
+
+- Simulation
+- Clock
+- Controller
+- Delay
+- Lock
+
+Each parameter shall have
+
+- a physical meaning
+- an explicit unit
+- a valid range
+- a default value
+
+Derived parameters (for example, the reference period) shall be calculated automatically.
+
+The parameter definition will be implemented in Issue #3.
+
+---
+
 # Simulation Principle
 
 ## Fundamental Philosophy
@@ -65,15 +94,7 @@ Current proposal
 The feedback edge is generated using
 
 ```
-Feedback Edge
-
-=
-
-Reference Edge
-
-+
-
-Current Delay
+Feedback Edge = Reference Edge + Current Delay
 ```
 
 Advantages
@@ -97,29 +118,13 @@ Status
 Candidate A
 
 ```
-Phase Error
-
-=
-
-Reference Edge
-
--
-
-Feedback Edge
+Phase Error = Reference Edge - Feedback Edge
 ```
 
 Candidate B
 
 ```
-Phase Error
-
-=
-
-Expected Feedback Edge
-
--
-
-Actual Feedback Edge
+Phase Error = Expected Feedback Edge - Actual Feedback Edge
 ```
 
 Current direction
@@ -175,23 +180,17 @@ Decision
 
 The updated control value affects the next simulation cycle.
 
+```
 Current cycle
-
-↓
-
+    ↓
 Phase Detector
-
-↓
-
+    ↓
 Controller
-
-↓
-
+    ↓
 Delay Update
-
-↓
-
+    ↓
 Next Cycle
+```
 
 This one-cycle latency models discrete-time behavior and avoids algebraic loops.
 

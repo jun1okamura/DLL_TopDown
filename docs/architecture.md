@@ -295,7 +295,7 @@ Examples
 - Phase error
 - Lock status
 
-Separating parameters from state improves readability and future extensibility.
+Separating parameters from state improves readability and future extensibility. Parameter definitions are implemented independently from simulation state. All configuration values remain immutable during one simulation run. Only the simulation state is updated at every event.
 
 ---
 
