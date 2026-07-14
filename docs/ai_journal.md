@@ -89,3 +89,55 @@ AI Contributions
 Lessons Learned
 
 Architecture should be finalized before parameter implementation.
+
+# Journal 003
+
+Topic
+
+Parameter Definition
+
+Human Decisions
+
+- Approved immutable parameter design.
+- Selected dataclass(frozen=True).
+- Separated configuration from simulation state.
+
+AI Contributions
+
+- Proposed parameter hierarchy.
+- Suggested executable specification tests.
+- Reviewed parameter validation strategy.
+
+Lessons Learned
+
+Executable specification using pytest provides an effective verification method for configuration objects.
+
+Next Step
+
+Implement Simulation State.
+
+# Journal 004
+
+Topic
+
+Simulation State
+
+Human Decisions
+
+- Approved mutable simulation-state design.
+- Separated state initialization from simulation behavior.
+- Approved in-place reset of the state object.
+
+AI Contributions
+
+- Proposed the SimulationState data structure.
+- Defined initialization and reset responsibilities.
+- Proposed executable specification tests.
+
+Lessons Learned
+
+Separating immutable parameters from mutable state produces a clear boundary between simulation configuration and execution.
+
+Next Step
+
+Implement the Event Simulation Engine.
