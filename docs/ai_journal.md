@@ -141,3 +141,29 @@ Separating immutable parameters from mutable state produces a clear boundary bet
 Next Step
 
 Implement the Event Simulation Engine.
+
+# Journal 005
+
+## Topic
+
+Event Simulation Engine
+
+## Human Decisions
+
+- Approved the first executable event-driven simulation engine.
+- Adopted the rule that updated delay is applied from the next simulation cycle.
+- Confirmed the execution order follows the approved architecture.
+
+## AI Contributions
+
+- Proposed the DLLSimulator class.
+- Implemented the Level 1 event-driven simulation flow.
+- Proposed executable specification tests for simulator behavior.
+
+## Lessons Learned
+
+Separating Parameters, State, and Simulator results in a clean event-driven architecture that can later be extended by replacing each algorithm block with dedicated models.
+
+## Next Step
+
+Separate the delay model from the simulator.
