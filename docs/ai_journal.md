@@ -167,3 +167,31 @@ Separating Parameters, State, and Simulator results in a clean event-driven arch
 ## Next Step
 
 Separate the delay model from the simulator.
+
+# Journal 006
+
+## Topic
+
+Ideal Delay Model
+
+## Human Decisions
+
+- Separated the delay calculation from the simulation engine.
+- Adopted a stateless delay model with deterministic behavior.
+- Confirmed that the updated delay is applied from the next simulation cycle.
+
+## AI Contributions
+
+- Designed the IdealDelayModel interface.
+- Proposed separation of delay calculation from the simulator.
+- Developed executable specification tests.
+
+## Lessons Learned
+
+Separating behavioral models from the event engine greatly improves readability, testability, and future extensibility.
+
+## Next Step
+
+Implement the Phase/Frequency Detector (PFD).
+
+

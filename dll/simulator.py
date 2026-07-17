@@ -4,22 +4,23 @@ simulator.py
 Level 1 Event-Driven DLL Simulator.
 
 Issue #5 : Event Simulation Engine
+Issue #6 : Ideal Delay Model
 """
 
+from dll.delay_model import IdealDelayModel
 from dll.params import DLLParams
 from dll.state import SimulationState
 
 
 class DLLSimulator:
-    """
-    Level 1 event-driven DLL simulator.
-    """
 
     def __init__(self, params: DLLParams):
 
         self.params = params
 
         self.state = SimulationState.initial(params)
+
+        self.delay_model = IdealDelayModel(params)
 
         self.history = {
             "cycle": [],
@@ -38,7 +39,7 @@ class DLLSimulator:
         for values in self.history.values():
             values.clear()
 
-    def step(self):
+    def step(self) -> SimulationState:
 
         params = self.params
         state = self.state
@@ -60,6 +61,8 @@ class DLLSimulator:
         # --------------------------------------------------
         #
 
+        # The delay stored at the beginning of this step
+        # determines the current feedback-edge timing.
         state.fb_edge_time = (
             state.ref_edge_time
             + state.delay
@@ -82,11 +85,15 @@ class DLLSimulator:
         # --------------------------------------------------
         #
 
-        phase_error_ui = abs(
-            state.phase_error
-        ) / params.clock.t_ref
+        phase_error_ui = (
+            abs(state.phase_error)
+            / params.clock.t_ref
+        )
 
-        if phase_error_ui <= params.lock.phase_threshold_ui:
+        if (
+            phase_error_ui
+            <= params.lock.phase_threshold_ui
+        ):
 
             state.lock_counter += 1
 
@@ -113,22 +120,14 @@ class DLLSimulator:
 
         #
         # --------------------------------------------------
-        # 6. Delay Line
+        # 6. Ideal Delay Model
         # --------------------------------------------------
         #
 
-        state.delay = (
-            params.delay.delay_init
-            + state.control
-            * params.delay.delay_gain
-        )
-
-        state.delay = max(
-            params.delay.delay_min,
-            min(
-                state.delay,
-                params.delay.delay_max,
-            ),
+        # The newly calculated delay is used from
+        # the next simulation cycle.
+        state.delay = self.delay_model.update(
+            state.control
         )
 
         #
@@ -137,7 +136,9 @@ class DLLSimulator:
         # --------------------------------------------------
         #
 
-        self.history["cycle"].append(state.cycle)
+        self.history["cycle"].append(
+            state.cycle
+        )
 
         self.history["ref_edge_time"].append(
             state.ref_edge_time
@@ -173,7 +174,7 @@ class DLLSimulator:
 
         return state
 
-    def run(self):
+    def run(self) -> dict[str, list]:
 
         for _ in range(
             self.params.simulation.n_cycles
@@ -182,4 +183,3 @@ class DLLSimulator:
             self.step()
 
         return self.history
-    

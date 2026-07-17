@@ -327,3 +327,9 @@ The following decisions should be revisited after Level 1 is complete.
 - Controller algorithm
 
 The architecture should evolve only after verifying that the current assumptions are insufficient.
+
+### Observation
+
+The delay model is implemented as a stateless component.
+Given the same control input, it always produces the same delay output.
+This design allows the simulator to remain independent of the specific delay implementation and simplifies replacement with nonlinear or jitter-aware models in future issues.
