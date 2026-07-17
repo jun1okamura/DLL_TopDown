@@ -194,4 +194,30 @@ Separating behavioral models from the event engine greatly improves readability,
 
 Implement the Phase/Frequency Detector (PFD).
 
+# Journal 007
 
+## Topic
+
+Ideal Phase Detector
+
+## Human Decisions
+
+- Separated phase-error calculation from the simulation engine.
+- Defined the phase-error sign convention.
+- Confirmed that the phase detector should remain stateless and deterministic.
+
+## AI Contributions
+
+- Designed the IdealPhaseDetector interface.
+- Proposed executable specification tests for phase-error behavior.
+- Integrated the phase detector into DLLSimulator.
+
+## Lessons Learned
+
+Explicitly defining and testing the phase-error sign convention is important because the convention directly affects the behavior and stability of the loop controller.
+
+Floating-point physical quantities should be compared using approximate equality in unit tests.
+
+## Next Step
+
+Implement the Ideal Loop Controller.

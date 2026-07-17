@@ -333,3 +333,17 @@ The architecture should evolve only after verifying that the current assumptions
 The delay model is implemented as a stateless component.
 Given the same control input, it always produces the same delay output.
 This design allows the simulator to remain independent of the specific delay implementation and simplifies replacement with nonlinear or jitter-aware models in future issues.
+
+### Phase Error Sign Convention
+
+The Ideal Phase Detector defines phase error as:
+
+    phase_error = ref_edge_time - fb_edge_time
+
+Therefore:
+
+- Positive phase error means the feedback edge arrives early.
+- Negative phase error means the feedback edge arrives late.
+- Zero phase error means both edges are aligned.
+
+The phase detector is implemented as a stateless and deterministic component.
