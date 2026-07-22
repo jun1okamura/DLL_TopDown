@@ -7,6 +7,7 @@ Issue #5 : Event Simulation Engine
 Issue #6 : Ideal Delay Model
 Issue #7 : Ideal Phase Detector
 Issue #8 : Ideal Loop Controller
+Issue #9 : Lock Detector
 """
 
 from dll.params import DLLParams
@@ -14,7 +15,7 @@ from dll.state import SimulationState
 from dll.phase_detector import IdealPhaseDetector
 from dll.controller import IdealLoopController
 from dll.delay_model import IdealDelayModel
-
+from dll.lock_detector import LockDetector
 
 class DLLSimulator:
 
@@ -27,6 +28,8 @@ class DLLSimulator:
         self.phase_detector = IdealPhaseDetector()
 
         self.controller = IdealLoopController(params)
+
+        self.lock_detector = LockDetector(params)
 
         self.delay_model = IdealDelayModel(params)
 
@@ -92,26 +95,9 @@ class DLLSimulator:
         # 4. Lock Detection
         # --------------------------------------------------
         #
-
-        phase_error_ui = (
-            abs(state.phase_error)
-            / params.clock.t_ref
-        )
-
-        if (
-            phase_error_ui
-            <= params.lock.phase_threshold_ui
-        ):
-
-            state.lock_counter += 1
-
-        else:
-
-            state.lock_counter = 0
-
-        state.locked = (
-            state.lock_counter
-            >= params.lock.required_lock_cycles
+        (state.lock_counter, state.locked,) = self.lock_detector.update(
+            state.phase_error, 
+            state.lock_counter,
         )
 
         #
@@ -190,3 +176,4 @@ class DLLSimulator:
             self.step()
 
         return self.history
+    

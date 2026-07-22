@@ -254,3 +254,36 @@ All regression tests passed.
 
 ```text
 45 passed
+
+# Journal 009
+
+## Topic
+
+Lock Detector
+
+## Human Decisions
+
+- Separated lock detection from the simulation engine.
+- Adopted consecutive-cycle qualification for lock detection.
+- Defined the threshold boundary as part of the valid lock range.
+- Kept lock counter and lock status in `SimulationState`.
+
+## AI Contributions
+
+- Proposed the stateless `LockDetector` interface.
+- Organized phase-error normalization in UI.
+- Proposed executable specification tests.
+- Reviewed integration with `DLLSimulator`.
+
+## Lessons Learned
+
+Lock detection requires both an error threshold and a consecutive-cycle condition to avoid declaring lock from a temporary phase alignment.
+
+Keeping the lock state in `SimulationState` allows the detector to remain stateless, deterministic, and independently testable.
+
+## Verification
+
+All regression tests passed.
+
+```text
+56 passed
