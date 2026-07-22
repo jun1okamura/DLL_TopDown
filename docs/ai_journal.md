@@ -221,3 +221,36 @@ Floating-point physical quantities should be compared using approximate equality
 ## Next Step
 
 Implement the Ideal Loop Controller.
+
+# Journal 008
+
+## Topic
+
+Ideal Loop Controller
+
+## Human Decisions
+
+- Separated the control-update algorithm from the simulation engine.
+- Adopted a stateless and deterministic controller.
+- Confirmed the control direction forms negative feedback with the phase detector and delay model.
+- Approved the ideal discrete-time control equation.
+
+## AI Contributions
+
+- Proposed the `IdealLoopController` interface.
+- Organized the controller as an independent component.
+- Proposed executable specification tests.
+- Reviewed integration with `DLLSimulator`.
+
+## Lessons Learned
+
+The phase-error sign convention, controller polarity, and delay sensitivity must be considered together to ensure negative feedback.
+
+Separating the controller from the simulation engine improves testability and allows future replacement with PI or other controller models.
+
+## Verification
+
+All regression tests passed.
+
+```text
+45 passed

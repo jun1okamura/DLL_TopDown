@@ -6,12 +6,14 @@ Level 1 Event-Driven DLL Simulator.
 Issue #5 : Event Simulation Engine
 Issue #6 : Ideal Delay Model
 Issue #7 : Ideal Phase Detector
+Issue #8 : Ideal Loop Controller
 """
 
-from dll.delay_model import IdealDelayModel
 from dll.params import DLLParams
-from dll.phase_detector import IdealPhaseDetector
 from dll.state import SimulationState
+from dll.phase_detector import IdealPhaseDetector
+from dll.controller import IdealLoopController
+from dll.delay_model import IdealDelayModel
 
 
 class DLLSimulator:
@@ -23,6 +25,8 @@ class DLLSimulator:
         self.state = SimulationState.initial(params)
 
         self.phase_detector = IdealPhaseDetector()
+
+        self.controller = IdealLoopController(params)
 
         self.delay_model = IdealDelayModel(params)
 
@@ -116,10 +120,9 @@ class DLLSimulator:
         # --------------------------------------------------
         #
 
-        state.control += (
-            params.controller.loop_gain
-            * state.phase_error
-            / params.clock.t_ref
+        state.control = self.controller.update(
+            state.control,
+            state.phase_error,
         )
 
         #
