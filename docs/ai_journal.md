@@ -320,4 +320,101 @@ Simulation History
   - Snapshot behavior
   - Clear operation
 
-  
+  ---
+
+## Lessons Learned
+
+- Separating history management significantly simplified the responsibilities of `DLLSimulator`.
+- Recording immutable snapshots is safer than storing references to mutable state objects.
+- A dedicated history component makes future extensions, such as CSV export, plotting, and pandas integration, straightforward.
+- Regression testing quickly identified API changes after refactoring.
+
+---
+
+## Result
+
+- `SimulationHistory` implemented as an independent component.
+- Unit tests: **9 passed**.
+- Total regression tests: **65 passed**.
+
+---
+
+## Next Step
+
+Implement **Visualization** using `SimulationHistory` as the unified data source.
+
+# Journal 011
+
+## Topic
+
+Reference Clock
+
+---
+
+## Human Decisions
+
+- Separated the ideal reference clock generation from `DLLSimulator`.
+- Introduced `ReferenceClock` as an independent component.
+- Defined a minimal public API:
+  - `ReferenceClock(params)`
+  - `update(cycle)`
+- Adopted a stateless implementation.
+- Fixed the ideal reference edge timing model as:
+
+  `reference_edge_time = cycle × t_ref`
+
+- Deferred jitter, frequency drift, spread-spectrum clocking, and other non-ideal behaviors to future issues.
+
+---
+
+## AI Contributions
+
+- Proposed the component architecture.
+- Designed the public API.
+- Implemented a simple stateless reference clock model.
+- Designed a dedicated unit test suite covering constructor, timing calculation, repeatability, and parameter integrity.
+- Assisted in integrating the component into `DLLSimulator`.
+
+---
+
+## Lessons Learned
+
+- Separating the reference clock further reduced the responsibilities of `DLLSimulator`.
+- A stateless timing generator is straightforward to verify and maintain.
+- Fixing the ideal timing model first provides a stable baseline before introducing non-ideal clock behavior.
+- The component architecture now allows future clock models to be replaced without modifying the simulator workflow.
+
+---
+
+## Result
+
+- Implemented `dll/reference_clock.py`.
+- Added `tests/test_reference_clock.py`.
+- Unit tests: **6 passed**.
+- Total regression tests: **71 passed**.
+
+---
+
+## Architecture Status
+
+Current simulator architecture:
+
+```
+DLLSimulator
+    ├── ReferenceClock
+    ├── DelayModel
+    ├── PhaseDetector
+    ├── Controller
+    ├── LockDetector
+    ├── SimulationHistory
+    └── SimulationState
+```
+
+`DLLSimulator` now serves primarily as an orchestrator that coordinates independent simulation components.
+
+---
+
+## Next Step
+
+Implement waveform visualization using `SimulationHistory` as the unified simulation data source.
+

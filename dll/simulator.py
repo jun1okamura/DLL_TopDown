@@ -9,6 +9,7 @@ Issue #7 : Ideal Phase Detector
 Issue #8 : Ideal Loop Controller
 Issue #9 : Lock Detector
 Issue #10: Simulation History
+Issue #11: Reference Clock
 """
 
 from dll.params import DLLParams
@@ -18,6 +19,7 @@ from dll.controller import IdealLoopController
 from dll.delay_model import IdealDelayModel
 from dll.lock_detector import LockDetector
 from dll.history import SimulationHistory
+from dll.reference_clock import ReferenceClock
 
 class DLLSimulator:
 
@@ -26,6 +28,8 @@ class DLLSimulator:
         self.params = params
 
         self.state = SimulationState.initial(params)
+
+        self.reference_clock = ReferenceClock(params)
 
         self.phase_detector = IdealPhaseDetector()
 
@@ -54,8 +58,9 @@ class DLLSimulator:
         # --------------------------------------------------
         #
         state.ref_edge_time = (
-            state.cycle
-            * params.clock.t_ref
+            self.reference_clock.update(
+                state.cycle
+            )
         )
 
         #
