@@ -8,6 +8,7 @@ Issue #6 : Ideal Delay Model
 Issue #7 : Ideal Phase Detector
 Issue #8 : Ideal Loop Controller
 Issue #9 : Lock Detector
+Issue #10: Simulation History
 """
 
 from dll.params import DLLParams
@@ -16,6 +17,7 @@ from dll.phase_detector import IdealPhaseDetector
 from dll.controller import IdealLoopController
 from dll.delay_model import IdealDelayModel
 from dll.lock_detector import LockDetector
+from dll.history import SimulationHistory
 
 class DLLSimulator:
 
@@ -33,22 +35,13 @@ class DLLSimulator:
 
         self.delay_model = IdealDelayModel(params)
 
-        self.history = {
-            "cycle": [],
-            "ref_edge_time": [],
-            "fb_edge_time": [],
-            "phase_error": [],
-            "control": [],
-            "delay": [],
-            "locked": [],
-        }
+        self.history = SimulationHistory()
 
     def reset(self):
 
         self.state.reset(self.params)
 
-        for values in self.history.values():
-            values.clear()
+        self.history.clear()
 
     def step(self) -> SimulationState:
 
@@ -60,7 +53,6 @@ class DLLSimulator:
         # 1. Reference Edge
         # --------------------------------------------------
         #
-
         state.ref_edge_time = (
             state.cycle
             * params.clock.t_ref
@@ -71,7 +63,6 @@ class DLLSimulator:
         # 2. Feedback Edge
         # --------------------------------------------------
         #
-
         # The delay stored at the beginning of this step
         # determines the current feedback-edge timing.
         state.fb_edge_time = (
@@ -84,7 +75,6 @@ class DLLSimulator:
         # 3. Ideal Phase Detector
         # --------------------------------------------------
         #
-
         state.phase_error = self.phase_detector.update(
             state.ref_edge_time,
             state.fb_edge_time,
@@ -105,7 +95,6 @@ class DLLSimulator:
         # 5. Controller
         # --------------------------------------------------
         #
-
         state.control = self.controller.update(
             state.control,
             state.phase_error,
@@ -116,7 +105,6 @@ class DLLSimulator:
         # 6. Ideal Delay Model
         # --------------------------------------------------
         #
-
         # The newly calculated delay is used from
         # the next simulation cycle.
         state.delay = self.delay_model.update(
@@ -128,41 +116,13 @@ class DLLSimulator:
         # 7. Record History
         # --------------------------------------------------
         #
-
-        self.history["cycle"].append(
-            state.cycle
-        )
-
-        self.history["ref_edge_time"].append(
-            state.ref_edge_time
-        )
-
-        self.history["fb_edge_time"].append(
-            state.fb_edge_time
-        )
-
-        self.history["phase_error"].append(
-            state.phase_error
-        )
-
-        self.history["control"].append(
-            state.control
-        )
-
-        self.history["delay"].append(
-            state.delay
-        )
-
-        self.history["locked"].append(
-            state.locked
-        )
+        self.history.record(state)
 
         #
         # --------------------------------------------------
         # 8. Advance Cycle
         # --------------------------------------------------
         #
-
         state.cycle += 1
 
         return state
@@ -175,5 +135,5 @@ class DLLSimulator:
 
             self.step()
 
-        return self.history
+        return self.history.data
     

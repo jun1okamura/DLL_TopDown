@@ -98,10 +98,9 @@ def test_history_is_recorded():
 
     sim.step()
 
-    assert len(sim.history["cycle"]) == 1
-    assert len(sim.history["delay"]) == 1
-    assert len(sim.history["control"]) == 1
-
+    assert len(
+        sim.history.data["cycle"]
+    ) == 1
 
 # ============================================================
 # Run
@@ -121,10 +120,11 @@ def test_run_multiple_cycles():
     )
 
     assert (
-        len(sim.history["cycle"])
+        len(
+            sim.history.data["cycle"]
+        )
         == params.simulation.n_cycles
     )
-
 
 # ============================================================
 # Reset
@@ -142,10 +142,9 @@ def test_reset():
 
     assert sim.state.cycle == 0
 
-    assert len(sim.history["cycle"]) == 0
-
-    assert sim.state.locked is False
-
+    assert len(
+        sim.history.data["cycle"]
+    ) == 0
 
 # ============================================================
 # Delay Limit

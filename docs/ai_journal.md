@@ -287,3 +287,37 @@ All regression tests passed.
 
 ```text
 56 passed
+
+# Journal 010
+
+## Topic
+
+Simulation History
+
+---
+
+## Human Decisions
+
+- Separated history recording from `DLLSimulator`.
+- Introduced `SimulationHistory` as an independent component.
+- Defined the history API as:
+  - `record(state)`
+  - `clear()`
+  - `data`
+- Decided that `SimulationHistory` stores snapshots of `SimulationState`, preventing later modifications of the state from affecting recorded history.
+- Defined that all history fields must always have the same number of samples.
+
+---
+
+## AI Contributions
+
+- Proposed the component interface for `SimulationHistory`.
+- Designed a comprehensive unit test suite covering:
+  - Constructor
+  - Initial empty history
+  - Single-state recording
+  - Multiple-state recording
+  - Snapshot behavior
+  - Clear operation
+
+  
