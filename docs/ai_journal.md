@@ -418,3 +418,90 @@ DLLSimulator
 
 Implement waveform visualization using `SimulationHistory` as the unified simulation data source.
 
+# Journal 012
+
+## Topic
+
+Visualization Framework
+
+---
+
+## Human Decisions
+
+- Introduced a dedicated visualization component independent of the simulation engine.
+- Adopted a stateless `Visualizer` class.
+- Used `SimulationHistory` as the only input to the visualization layer.
+- Defined the public API as:
+  - `plot_delay(history)`
+  - `plot_control(history)`
+- Chose to return a `matplotlib.figure.Figure` object instead of displaying or saving figures inside the component.
+- Assigned figure display (`plt.show()`) to the application (`run.py`).
+
+---
+
+## AI Contributions
+
+- Proposed the architecture separating simulation and visualization.
+- Designed the public API for the visualization component.
+- Implemented independent plotting methods for delay and controller output.
+- Recommended returning `Figure` objects to maximize flexibility for GUI, notebooks, automated testing, and file export.
+- Assisted in integrating the visualizer into the project entry point (`run.py`).
+
+---
+
+## Lessons Learned
+
+- Separating visualization from the simulator keeps each component focused on a single responsibility.
+- `SimulationHistory` functions as the common interface between simulation and visualization.
+- Returning `Figure` objects rather than calling `plt.show()` inside the library makes the visualization reusable in multiple execution environments.
+- The visualization framework can now be extended by simply adding new plotting methods without modifying the simulator.
+
+---
+
+## Result
+
+Implemented:
+
+- `Visualizer.plot_delay()`
+- `Visualizer.plot_control()`
+
+Updated:
+
+- `run.py`
+
+The simulator now produces two independent figures:
+
+- Delay vs. Cycle
+- Control vs. Cycle
+
+The complete simulation and visualization flow has been verified successfully.
+
+---
+
+## Current Architecture
+
+```
+DLLSimulator
+      │
+      ▼
+SimulationHistory
+      │
+      ▼
+Visualizer
+      ├── plot_delay()
+      └── plot_control()
+      │
+      ▼
+Matplotlib Figure
+```
+
+---
+
+## Next Step
+
+Extend the visualization framework with additional plots:
+
+- `plot_phase_error()`
+- `plot_lock_status()`
+
+Then introduce `plot_all()` to generate a multi-panel waveform viewer for comprehensive DLL analysis.
